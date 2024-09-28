@@ -93,50 +93,46 @@
     <!-- /container -->
 </div>
 <!-- /BREADCRUMB -->
-
-<!-- SECTION -->
-<div class="custom-section">
-    <div class="container">
+<div class="feedback-section container">
+    <h2 class="text-center feedback-title">Feedback Form</h2>
+    <form>
         <div class="row">
-            <div class="custom-members">
-                <div class="custom-container">
-                    <div class="custom-icon">
-                        <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
-                        <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.facebook.com"><i class="fab fa-twitter"></i></a>
-                    </div>
-                    <img src="./img/long.png" alt="Long Nguyen">
-                    <h2>Nguyen Hoang Long</h2>
-                    <p>Regina, Saskatchewan</p>
-                    <p>Students at Saskatchewan Polytechnic</p>
-                    <p>Specialized:Computer System Technology </p>
-                    <p>Sememter 3 | ID: 000526102</p>
-                    <div class="custom-btn-container">
-                        <a href="https://www.facebook.com"><button>contact</button></a>
-                        <a href="https://www.facebook.com"><button>add friend</button></a>
-                    </div>
+            <!-- Left column for Name and Email -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name">
                 </div>
-                <div class="custom-container">
-                    <div class="custom-icon">
-                        <a href="https://www.facebook.com/trtthien.2304/"><i class="fab fa-facebook"></i></a>
-                        <a href="https://www.instagram.com/thanhthienn_2304/"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.facebook.com/trtthien.2304/"><i class="fab fa-twitter"></i></a>
-                    </div>
-                    <img src="./img/khoi.jpg" alt="Khoi Tran">
-                    <h2>Tran Le Khoi</h2>
-                    <p>Regina, Saskatchewan</p>
-                    <p>Students at Saskatchewan Polytechnic</p>
-                    <p>Specialized:Computer System Technology</p>
-                    <p>Sememter 3 | ID: 000525186</p>
-                    <div class="custom-btn-container">
-                        <a href="https://www.facebook.com"><button>contact</button></a>
-                        <a href="https://www.facebook.com"><button>add friend</button></a>
-                    </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                </div>
+            </div>
+
+            <!-- Right column for Cake Name and Phone -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="cakeName">Cake Name:</label>
+                    <input type="text" class="form-control" id="cakeName" placeholder="Enter cake name">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="text" class="form-control" id="phone" placeholder="Enter your phone number">
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Review Section -->
+        <div class="form-group">
+            <label for="review">Review:</label>
+            <textarea class="form-control" id="review" rows="5" placeholder="Write your review here"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+    </form>
 </div>
+<!-- /FEEDBACK FORM SECTION -->
 
 <!-- /SECTION -->
 
