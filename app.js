@@ -1,11 +1,11 @@
+// app.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const { check, validationResult } = require('express-validator');
 const multer = require('multer');
 const fs = require('fs');
-const session = require('express-session'); // Import express-session
-const querystring = require('querystring');
+
 const app = express();
 const port = 8080;
 
@@ -31,39 +31,17 @@ const upload = multer({ storage: storage });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Set up session middleware
-app.use(session({
-    secret: 'your-secret-key', // Change this to a secure secret key
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // Set to true if using HTTPS
-}));
-
 // Serve static files
 app.use('/css', express.static(__dirname + '/css/'));
 app.use('/img', express.static(__dirname + '/img'));
-app.use('/js', express.static(path.join(__dirname, '/js')));
-app.use('/routes', express.static(path.join(__dirname, '/routes')));
-
+app.use('/js', express.static(__dirname + '/js'));
 
 // Serve HTML files
 app.get('/start.html', (req, res) => res.sendFile(path.join(__dirname, 'start.html')));
 app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/checkout.html', (req, res) => res.sendFile(path.join(__dirname, 'checkout.html')));
-app.get('/endpage.html', (req, res) => res.sendFile(path.join(__dirname, 'endpage.html')));
-
-// Serve product.html with embedded session data
-app.get('/product.html', (req, res) => {
-    const productData = req.session.productData; // Lấy dữ liệu sản phẩm từ session
-    if (productData) {
-        res.sendFile(path.join(__dirname, 'product.html'));
-        // Tạo chuỗi query từ dữ liệu sản phẩm
-        const queryString = querystring.stringify(productData);
-
-    }
-
-});
-
+app.get('/product.html', (req, res) => res.sendFile(path.join(__dirname, 'product.html')));
+app.get('/AboutUs.html', (req, res) => res.sendFile(path.join(__dirname, 'AboutUs.html')));
 
 // Handle form submission
 app.post('/checkout', upload.single('file'), [
@@ -80,32 +58,26 @@ app.post('/checkout', upload.single('file'), [
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        // console.log(errors.array());
         return res.status(422).json({ errors: errors.array() });
     }
 
     // Handle successful order submission
-   // console.log(req.body);
-    req.session.productData = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        phone: req.body.phone,
-        number: req.body.number,
-        size: req.body.size,
-        review: req.body.review,
-        imageUrl: req.file ? `/uploads/${req.file.filename}` : null// Save image URL
-    };
-    const queryString = querystring.stringify(req.session.productData); // Thay đổi từ req.body sang req.session.productData
-    const redirectUrl = '/product.html?' + queryString;
-
-
-    res.redirect(redirectUrl);
+    console.log(req.body);
+    if (req.file) {
+        console.log('Uploaded file:', req.file);
+    }
+    res.status(200).send('khoi supp');
 });
 
-
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 // Start the server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+app.js
+
