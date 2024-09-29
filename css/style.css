@@ -310,17 +310,23 @@ label {
   background-color: #FFF;
   font-size: 16px;
 }
-.is-invalid {
-  border: 2px solid red;
-}
 
-.is-valid {
-  border: 2px solid green;
-}
-
+/*.is-valid {*/
+/*  border: 2px solid green;*/
+/*}*/
+/*.error-message {*/
+/*  color: red; !* Hoặc màu bạn muốn *!*/
+/*}*/
+/*is-invalid{*/
+/*  color:red;*/
+/*}*/
 .error-message {
-  color: red;
-  font-size: 0.9em;
+  color: red; /* Màu đỏ cho thông báo lỗi */
+  display: none; /* Ẩn thông báo lỗi mặc định */
+}
+
+.error-message.visible {
+  display: block; /* Hiển thị thông báo lỗi khi có lỗi */
 }
 
 

@@ -71,60 +71,60 @@
 
 <div class="feedback-section container">
     <h2 class="text-center feedback-title">Cake Order</h2>
-    <form id="orderForm" action="http://localhost:8080/checkout" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="firstName">First Name:</label>
-            <input type="text" class="form-control" id="firstName" name="firstName">
-            <div class="error-message" id="error-firstName"></div>
-        </div>
-        <div class="form-group">
-            <label for="lastName">Last Name:</label>
-            <input type="text" class="form-control" id="lastName" name="lastName">
-            <div class="error-message" id="error-lastName"></div>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email">
-            <div class="error-message" id="error-email"></div>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone:</label>
-            <input type="text" class="form-control" id="phone" name="phone">
-            <div class="error-message" id="error-phone"></div>
-        </div>
-        <div class="form-group">
-            <label for="number">Number:</label>
-            <select class="form-control" id="number" name="number">
-                <option value="">Select a number</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-            </select>
-            <div class="error-message" id="error-number"></div>
-        </div>
-        <div class="form-group">
-            <label for="size">Size:</label>
-            <select class="form-control" id="size" name="size">
-                <option value="">Select a size</option>
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-            </select>
-            <div class="error-message" id="error-size"></div>
-        </div>
-        <div class="form-group">
-            <label for="review">Review:</label>
-            <textarea class="form-control" id="review" name="review"></textarea>
-            <div class="error-message" id="error-review"></div>
-        </div>
-<!--        <div class="form-group">-->
-<!--            <label for="fileUpload">Upload File:</label>-->
-<!--            <input type="file" class="form-control" id="fileUpload" name="file">-->
-<!--            <div class="error-message" id="error-fileUpload"></div>-->
-<!--        </div>-->
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-</div>
+    <div id="errorMessages" class="alert alert-danger d-none"></div>
+        <form id="orderForm" action="http://localhost:8080/checkout" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" class="form-control" id="firstName" name="firstName">
+                <div class="error-message invalid-feedback" id="error-firstName"></div>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" class="form-control" id="lastName" name="lastName">
+                <div class="error-message invalid-feedback" id="error-lastName"></div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email">
+                <div class="error-message invalid-feedback" id="error-email"></div>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" class="form-control" id="phone" name="phone">
+                <div class="error-message invalid-feedback" id="error-phone"></div>
+            </div>
+            <div class="form-group">
+                <label for="number">Number:</label>
+                <select class="form-control" id="number" name="number">
+                    <option value="">Select a number</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+                <div class="error-message invalid-feedback" id="error-number"></div>
+            </div>
+            <div class="form-group">
+                <label for="size">Size:</label>
+                <select class="form-control" id="size" name="size">
+                    <option value="">Select a size</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                </select>
+                <div class="error-message invalid-feedback" id="error-size"></div>
+            </div>
+            <div class="form-group">
+                <label for="review">Review:</label>
+                <textarea class="form-control" id="review" name="review"></textarea>
+                <div class="error-message invalid-feedback" id="error-review"></div>
+            </div>
+                    <div class="form-group">
+                        <label for="fileUpload">Upload File:</label>
+                        <input type="file" class="form-control" id="fileUpload" name="file">
+                        <div class="error-message" id="error-fileUpload"></div>
+                    </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
     <!-- FOOTER -->
 <footer id="footer">
     <div class="section">
@@ -168,58 +168,71 @@
 
 </footer>
 <script>
-    document.getElementById('orderForm').onsubmit = async function (event) {
-        event.preventDefault();
+    document.getElementById('orderForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn gửi form
 
-        // Xóa thông báo lỗi cũ và các class CSS cũ
-        const errorElements = document.querySelectorAll('.error-message');
-        errorElements.forEach(error => error.innerText = '');
+        // Xóa thông báo lỗi trước đó
+        const errorMessagesDiv = document.getElementById('errorMessages');
+        errorMessagesDiv.innerHTML = '';
+        errorMessagesDiv.classList.add('d-none');
 
-        const inputElements = document.querySelectorAll('.form-control');
-        inputElements.forEach(input => {
-            input.classList.remove('is-invalid', 'is-valid');
-        });
+        const errors = []; // Mảng lưu trữ các lỗi
 
-        const formData = new FormData(this);
-
-        try {
-            const response = await fetch(this.action, {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                // Nhận các lỗi từ server
-                const errors = await response.json();
-
-                // Hiển thị thông báo lỗi dưới mỗi trường form tương ứng và thêm class 'is-invalid'
-                errors.errors.forEach(error => {
-                    const inputElement = document.getElementById(error.param);
-                    const errorElement = document.getElementById(`error-${error.param}`);
-
-                    if (inputElement) {
-                        inputElement.classList.add('is-invalid'); // Đánh dấu màu đỏ cho trường bị lỗi
-                        if (errorElement) {
-                            errorElement.innerText = error.msg; // Hiển thị thông báo lỗi
-                        }
-                    }
-                });
-            } else {
-                // Đánh dấu các trường hợp lệ bằng màu xanh
-                inputElements.forEach(input => {
-                    input.classList.add('is-valid');
-                });
-
-                // Xử lý khi thành công
-                alert('Order submitted successfully');
-                this.reset(); // Reset form sau khi gửi thành công
-            }
-        } catch (error) {
-            console.error('Error submitting the form:', error);
+        // Kiểm tra từng trường
+        const firstName = document.getElementById('firstName').value.trim();
+        if (!firstName) {
+            errors.push('Please enter your first name');
         }
-    };
+
+        const lastName = document.getElementById('lastName').value.trim();
+        if (!lastName) {
+            errors.push('Please enter your last name');
+        }
+
+        const email = document.getElementById('email').value.trim();
+        if (!email || !validateEmail(email)) {
+            errors.push('Please enter a valid email');
+        }
+
+        const phone = document.getElementById('phone').value.trim();
+        if (!phone || isNaN(phone) || phone.length < 10 || phone.length > 15) {
+            errors.push('Phone number must contain digits only and be between 10 and 15 digits long');
+        }
+
+        const number = document.getElementById('number').value;
+        if (!number) {
+            errors.push('Please select a number');
+        }
+
+        const size = document.getElementById('size').value;
+        if (!size) {
+            errors.push('Please select a size');
+        }
+
+        const review = document.getElementById('review').value.trim();
+        if (!review || review.length < 5) {
+            errors.push('Review must be at least 5 characters long');
+        }
+
+        // Nếu có lỗi, hiển thị chúng
+        if (errors.length > 0) {
+            errorMessagesDiv.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
+            errorMessagesDiv.classList.remove('d-none');
+            return; // Dừng lại nếu có lỗi
+        }
+
+        // Gửi form nếu không có lỗi
+        this.submit();
+    });
+
+    // Hàm kiểm tra email
+    function validateEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
 
 </script>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
