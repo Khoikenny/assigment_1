@@ -39,7 +39,7 @@ app.use('/js', express.static(__dirname + '/js'));
 // Serve HTML files
 app.get('/start.html', (req, res) => res.sendFile(path.join(__dirname, 'start.html')));
 app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/checkout', (req, res) => res.sendFile(path.join(__dirname, 'checkout.html')));
+app.get('/checkout.html', (req, res) => res.sendFile(path.join(__dirname, 'checkout.html')));
 app.get('/product.html', (req, res) => res.sendFile(path.join(__dirname, 'product.html')));
 app.get('/AboutUs.html', (req, res) => res.sendFile(path.join(__dirname, 'AboutUs.html')));
 
@@ -79,3 +79,5 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+app.js
+
