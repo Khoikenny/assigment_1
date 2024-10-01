@@ -50,6 +50,8 @@ app.use('/routes', express.static(path.join(__dirname, '/routes')));
 app.get('/start.html', (req, res) => res.sendFile(path.join(__dirname, 'start.html')));
 app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/checkout.html', (req, res) => res.sendFile(path.join(__dirname, 'checkout.html')));
+app.get('/endpage.html', (req, res) => res.sendFile(path.join(__dirname, 'endpage.html')));
+
 // Serve product.html with embedded session data
 app.get('/product.html', (req, res) => {
     const productData = req.session.productData; // Lấy dữ liệu sản phẩm từ session
@@ -59,6 +61,7 @@ app.get('/product.html', (req, res) => {
         const queryString = querystring.stringify(productData);
 
     }
+
 });
 
 

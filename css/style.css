@@ -28,6 +28,11 @@ ul, ol {
   padding: 0;
   list-style: none
 }
+html, body {
+  height: 100%; /* Đặt chiều cao cho toàn bộ trang là 100% */
+  margin: 0;
+  padding: 0;
+}
 
 
 /*BUTTON*/
@@ -310,16 +315,6 @@ label {
   background-color: #FFF;
   font-size: 16px;
 }
-
-/*.is-valid {*/
-/*  border: 2px solid green;*/
-/*}*/
-/*.error-message {*/
-/*  color: red; !* Hoặc màu bạn muốn *!*/
-/*}*/
-/*is-invalid{*/
-/*  color:red;*/
-/*}*/
 .error-message {
   color: red; /* Màu đỏ cho thông báo lỗi */
   display: none; /* Ẩn thông báo lỗi mặc định */
@@ -328,8 +323,6 @@ label {
 .error-message.visible {
   display: block; /* Hiển thị thông báo lỗi khi có lỗi */
 }
-
-
 /*BREADCRUMB*/
 #breadcrumb {
   padding: 30px 0px;
@@ -472,6 +465,7 @@ label {
 /*MAIN NAV*/
 .container {
   width: 100%;
+
 }
 .main-nav>li+li {
   margin-left: 30px
@@ -509,7 +503,18 @@ label {
 .header-ctn li.nav-toggle {
   display: none;
 }
+/* Tăng kích thước chữ của tiêu đề */
+.container h2 {
+  font-size: 36px; /* Điều chỉnh kích thước chữ theo ý muốn */
+  font-weight: bold; /* Có thể điều chỉnh trọng lượng chữ nếu muốn */
+}
 
+/* Mở rộng kích thước của nút button */
+.btn-primary.btn-lg {
+  padding: 15px 40px; /* Điều chỉnh độ rộng và chiều cao nút */
+  font-size: 18px; /* Điều chỉnh kích thước chữ trong nút */
+  width: 200px; /* Điều chỉnh chiều rộng theo ý muốn */
+}
 
 @media only screen and (max-width: 991px) {
   .header-ctn .menu-toggle {
@@ -1223,6 +1228,9 @@ label {
 #footer {
   background: #000000;
   color: #ffffff;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
 
 #bottom-footer {
