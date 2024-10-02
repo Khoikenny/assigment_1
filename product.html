@@ -40,10 +40,12 @@
 <nav id="navigation">
   <div class="container">
     <div id="responsive-nav">
+      <!-- NAV-->
       <ul class="main-nav nav navbar-nav">
         <li class="active"><a href="index.html">Home</a></li>
-        <li><a href="store.html">Store</a></li>
-        <li><a id="newItemsLink" href="index.html#newItemsSection">New Items</a></li>
+        <li><a href="index.html">New Order</a></li>
+        <li><a href="AboutUs.html">About Us</a></li>
+        <li><a href="AboutUs.html">Feedback</a></li>
       </ul>
     </div>
   </div>
@@ -56,8 +58,8 @@
       <div class="col-md-12">
         <ul class="breadcrumb-tree">
           <li><a href="index.html">Home</a></li>
-          <li><a href="store.html">Store</a></li>
-          <li class="active">name of item</li>
+          <li><a href="checkout.html">Checkout</a></li>
+          <li class="active">cake name</li>
         </ul>
       </div>
     </div>
@@ -73,7 +75,7 @@
           <div class="carousel-inner">
             <div class="carousel-item active">
               <!-- Thay thế src bằng đường dẫn hình ảnh -->
-              <img loading="lazy" class="d-block w-100 zoom" src="img/khoi.jpg" alt="project-image-1" >
+              <img loading="lazy" class="d-block w-100 zoom" src="img/product01.png" alt="project-image-1" >
 
             </div>
           </div>
@@ -91,32 +93,33 @@
       <div class="col-lg-4 mt-5 mt-lg-0">
         <ul class="order-info list-unstyled" id="orderDetails">
           <li>
-            <p class="order-info-label">Full Name</p>
+            <p class="order-info-label">Full Name:</p>
             <p class="order-info-content" id="fullName"></p>
           </li>
           <li>
-            <p class="order-info-label">phone</p>
+            <p class="order-info-label">Phone:</p>
             <p class="order-info-content"id="phone"></p>
           </li>
           <li>
-            <p class="order-info-label">email</p>
+            <p class="order-info-label">Email:</p>
             <p class="order-info-content"id="email"></p>
           </li>
           <li>
-            <p class="order-info-label">number</p>
+            <p class="order-info-label">Number:</p>
             <p class="order-info-content"id="number"></p>
           </li>
           <li>
-            <p class="order-info-label">size</p>
+            <p class="order-info-label">Size:</p>
             <p class="order-info-content"id="size"></p>
           </li>
           <li>
-            <p class="order-info-label">review</p>
+            <p class="order-info-label">Review:</p>
             <p class="order-info-content" id="review"></p>
           </li>
+
         </ul>
 
-        <div class="add-to-cart">
+        <div class="add-to-cart" id="button-in-product">
           <a href="javascript:void(0);" class="add-to-cart-btn" onclick="addToCart()"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
         </div>
       </div>

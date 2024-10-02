@@ -45,11 +45,12 @@
 <nav id="navigation">
     <div class="container">
         <div id="responsive-nav">
+            <!-- NAV-->
             <ul class="main-nav nav navbar-nav">
                 <li class="active"><a href="index.html">Home</a></li>
-                <li><a href="store.html">Store</a></li>
-                <li><a id="newItemsLink" href="index.html#newItemsSection">New Items</a></li>
-<!--                <li><a href="index.html#eventCarousel">Event</a></li>-->
+                <li><a href="index.html">New Order</a></li>
+                <li><a href="AboutUs.html">About Us</a></li>
+                <li><a href="AboutUs.html">Feedback</a></li>
             </ul>
         </div>
     </div>
@@ -212,6 +213,19 @@
         const review = document.getElementById('review').value.trim();
         if (!review || review.length < 5) {
             errors.push('Review must be at least 5 characters long');
+        }
+        const fileInput = document.getElementById('fileUpload');
+        const file = fileInput.files[0];
+        const allowedExtensions = /(\.jpeg|\.jpg|\.png|\.gif)$/i;
+        if (file) {
+            if (!allowedExtensions.exec(file.name)) {
+                errors.push('Only JPEG, PNG, and GIF files are allowed.');
+            }
+            if (file.size > 2048000) { // 2MB in bytes
+                errors.push('File size must be less than 2MB.');
+            }
+        } else {
+            errors.push('Please upload a file.');
         }
 
         // Nếu có lỗi, hiển thị chúng
