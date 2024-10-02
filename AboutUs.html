@@ -55,22 +55,17 @@
 
 <!-- NAVIGATION -->
 <nav id="navigation">
-    <!-- container -->
     <div class="container">
-        <!-- responsive-nav -->
         <div id="responsive-nav">
-            <!-- NAV -->
+            <!-- NAV-->
             <ul class="main-nav nav navbar-nav">
-                <li class="active"><a href="product.html">Home</a></li>
-                <li><a href="store.html">Store</a></li>
-                <li><a id="newItemsLink" href="index.html#newItemsSection">New Items</a></li>
-                <li><a href="index.html#eventCarousel">Event</a></li>
+                <li class="active"><a href="index.html">Home</a></li>
+                <li><a href="index.html">New Order</a></li>
+                <li><a href="AboutUs.html">About Us</a></li>
+                <li><a href="AboutUs.html">Feedback</a></li>
             </ul>
-            <!-- /NAV -->
         </div>
-        <!-- /responsive-nav -->
     </div>
-    <!-- /container -->
 </nav>
 <!-- /NAVIGATION -->
 
@@ -81,10 +76,10 @@
         <!-- row -->
         <div class="row">
             <div class="col-md-12">
-                <h3 class="breadcrumb-header">Regular Page</h3>
+                <h3 class="breadcrumb-header">FEEDBACK</h3>
                 <ul class="breadcrumb-tree">
                     <li><a href="#">Home</a></li>
-                    <li class="active">About Us</li>
+                    <li class="active">About Us & Feedback</li>
                 </ul>
             </div>
         </div>
@@ -94,44 +89,106 @@
 </div>
 <!-- /BREADCRUMB -->
 <div class="feedback-section container">
-    <h2 class="text-center feedback-title">Feedback Form</h2>
-    <form>
+    <h2 class="text-center feedback-title">Feedback </h2>
+    <form id="feedbackForm" action="/submit-feedback" method="post">
         <div class="row">
-            <!-- Left column for Name and Email -->
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+                    <div class="invalid-feedback" id="nameError"></div>
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+                    <div class="invalid-feedback" id="emailError"></div>
                 </div>
             </div>
-
-            <!-- Right column for Cake Name and Phone -->
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="cakeName">Cake Name:</label>
-                    <input type="text" class="form-control" id="cakeName" placeholder="Enter cake name">
+                    <input type="text" class="form-control" id="cakeName" name="cakeName" placeholder="Enter cake name">
+                    <div class="invalid-feedback" id="cakeNameError"></div>
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone:</label>
-                    <input type="text" class="form-control" id="phone" placeholder="Enter your phone number">
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+                    <div class="invalid-feedback" id="phoneError"></div>
                 </div>
             </div>
         </div>
-
-        <!-- Review Section -->
         <div class="form-group">
             <label for="review">Review:</label>
-            <textarea class="form-control" id="review" rows="5" placeholder="Write your review here"></textarea>
+            <textarea class="form-control" id="review" name="review" rows="5" placeholder="Write your review here"></textarea>
         </div>
-
-        <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Submit Feedback</button>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const feedbackForm = document.getElementById('feedbackForm');
+
+        feedbackForm.addEventListener('submit', function(event) {
+            let formIsValid = true;
+
+            // Name Validation
+            const nameInput = document.getElementById('name');
+            const nameError = document.getElementById('nameError');
+            if (nameInput.value.trim().length < 3) {
+                nameError.textContent = 'Name must be at least 3 characters long';
+                nameInput.classList.add('is-invalid');
+                formIsValid = false;
+            } else {
+                nameError.textContent = '';
+                nameInput.classList.remove('is-invalid');
+            }
+
+            // Email Validation
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            if (!emailInput.checkValidity()) {
+                emailError.textContent = 'Please provide a valid email address';
+                emailInput.classList.add('is-invalid');
+                formIsValid = false;
+            } else {
+                emailError.textContent = '';
+                emailInput.classList.remove('is-invalid');
+            }
+
+            // Cake Name Validation
+            const cakeNameInput = document.getElementById('cakeName');
+            const cakeNameError = document.getElementById('cakeNameError');
+            if (!cakeNameInput.value.toLowerCase().includes('cake')) {
+                cakeNameError.textContent = 'Cake name must contain the word "cake"';
+                cakeNameInput.classList.add('is-invalid');
+                formIsValid = false;
+            } else {
+                cakeNameError.textContent = '';
+                cakeNameInput.classList.remove('is-invalid');
+            }
+
+            // Phone Validation
+            const phoneInput = document.getElementById('phone');
+            const phoneError = document.getElementById('phoneError');
+            const phonePattern = /^\d{3}-\d{3}-\d{4}$/;
+            if (!phonePattern.test(phoneInput.value)) {
+                phoneError.textContent = 'Phone number must be in the format 123-456-7890';
+                phoneInput.classList.add('is-invalid');
+                formIsValid = false;
+            } else {
+                phoneError.textContent = '';
+                phoneInput.classList.remove('is-invalid');
+            }
+
+            // Prevent form submission if any validation fails
+            if (!formIsValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
 <!-- /FEEDBACK FORM SECTION -->
 
 <!-- /SECTION -->
@@ -187,7 +244,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="js/slick.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/10.0.0/nouislider.min.js"></script>
-<script src="js/main.js"></script>
 
 </body>
 </html>

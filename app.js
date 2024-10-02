@@ -10,13 +10,17 @@ const app = express();
 const port = 8080;
 
 const uploadsDir = path.join(__dirname, 'uploads');
+const publicDir = path.join(__dirname, 'public', 'uploads');
 
-// Create uploads directory if it doesn't exist
+// Create necessary directories if they don't exist
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir);
 }
+if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir);
+}
 
-// Set up multer for file uploads
+// Multer storage with file validation (e.g., limiting to image files)
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadsDir);
@@ -25,8 +29,21 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage: storage });
 
+const fileFilter = (req, file, cb) => {
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (allowedMimeTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only JPEG, PNG, and GIF are allowed.'));
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB file size limit
+    fileFilter: fileFilter
+});
 // Body-parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,6 +68,8 @@ app.get('/start.html', (req, res) => res.sendFile(path.join(__dirname, 'start.ht
 app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/checkout.html', (req, res) => res.sendFile(path.join(__dirname, 'checkout.html')));
 app.get('/endpage.html', (req, res) => res.sendFile(path.join(__dirname, 'endpage.html')));
+app.get('/AboutUs.html', (req, res) => res.sendFile(path.join(__dirname, 'AboutUs.html')));
+
 
 // Serve product.html with embedded session data
 app.get('/product.html', (req, res) => {
@@ -80,6 +99,9 @@ app.post('/checkout', upload.single('file'), [
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        if (req.file) {
+            fs.unlinkSync(req.file.path);
+        }
         // console.log(errors.array());
         return res.status(422).json({ errors: errors.array() });
     }
@@ -101,6 +123,40 @@ app.post('/checkout', upload.single('file'), [
 
 
     res.redirect(redirectUrl);
+});
+app.post('/submit-feedback', [
+    // Name validation: Required and at least 3 characters long
+    check('name')
+        .trim()
+        .notEmpty().withMessage('Name is required')
+        .isLength({ min: 3 }).withMessage('Name must be at least 3 characters long'),
+
+    // Email validation: Required, valid format
+    check('email')
+        .isEmail().withMessage('Please provide a valid email address'),
+
+    // Cake Name validation: Custom validator to check if it contains 'cake'
+    check('cakeName')
+        .custom(value => {
+            if (!value.toLowerCase().includes('cake')) {
+                throw new Error('Cake name must contain the word "cake"');
+            }
+            return true;
+        }),
+
+    // Phone validation: Required, valid format (example: 123-456-7890)
+    check('phone')
+        .isMobilePhone().withMessage('Please provide a valid phone number')
+        .matches(/\d{3}-\d{3}-\d{4}/).withMessage('Phone number must be in the format 123-456-7890'),
+
+], (req, res) => {
+    // Find the validation errors in this request and wrap them in an object
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    res.send('Feedback submitted successfully!');
 });
 
 

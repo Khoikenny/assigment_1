@@ -323,6 +323,29 @@ label {
 .error-message.visible {
   display: block; /* Hiển thị thông báo lỗi khi có lỗi */
 }
+.order-info-label {
+  font-weight: bold;
+  font-size: 20px;
+}
+.order-info-content{
+  font-size:18px;
+}
+.form-container, #button-in-product {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Tăng kích thước nút cho phần tử button-in-product */
+#button-in-product a {
+  font-size: calc(100% + 3px); /* Tăng thêm 3px */
+  padding: 10px 20px; /* Điều chỉnh padding để nút to hơn */
+}
+
+/* Đảm bảo căn giữa nút trong container */
+#button-in-product {
+  display: inline-block;
+  vertical-align: middle;
+}
 /*BREADCRUMB*/
 #breadcrumb {
   padding: 30px 0px;
