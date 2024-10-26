@@ -73,7 +73,7 @@
 <div class="feedback-section container">
     <h2 class="text-center feedback-title">Cake Order</h2>
     <div id="errorMessages" class="alert alert-danger d-none"></div>
-        <form id="orderForm" action="http://localhost:8080/checkout" method="POST" enctype="multipart/form-data">
+        <form id="orderForm" action="http://localhost:8080/checkout.html" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="firstName">First Name:</label>
                 <input type="text" class="form-control" id="firstName" name="firstName">
@@ -163,10 +163,16 @@
                         <li><a href="AboutUs.html">Contact Us</a></li>
                     </ul>
                 </div>
+                <div class="col-lg-3 col-md-6 footer-widget footer-table">
+                    <h3 class="widget-title footer-title">Visited Pages</h3>
+                    <ul>
+                        <!-- VISITED_PAGES -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-
+    </div>
 </footer>
 <script>
     document.getElementById('orderForm').addEventListener('submit', function(event) {
@@ -238,6 +244,7 @@
         // Gửi form nếu không có lỗi
         this.submit();
     });
+
 
     // Hàm kiểm tra email
     function validateEmail(email) {

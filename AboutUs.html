@@ -121,10 +121,19 @@
             <label for="review">Review:</label>
             <textarea class="form-control" id="review" name="review" rows="5" placeholder="Write your review here"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        <div class="btn btn-primary" id="button-in-product">
+            <a href="javascript:void(0);"  onclick="addToCart()"><i class="fa fa-shopping-cart"></i>Submit Feedback</a>
+        </div>
     </form>
 </div>
+<script>
+    function addToCart() {
+        // Optionally: Collect data and send it to the server
 
+        // Chuyển hướng đến trang endpage.html
+        window.location.href = '/index.html';
+    }
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const feedbackForm = document.getElementById('feedbackForm');
@@ -228,6 +237,12 @@
                         <li><a href="AboutUs.html">Our Services</a></li>
                         <li><a href="AboutUs.html">Privacy Policy</a></li>
                         <li><a href="AboutUs.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-widget footer-table">
+                    <h3 class="widget-title footer-title">Visited Pages</h3>
+                    <ul>
+                        <!-- VISITED_PAGES -->
                     </ul>
                 </div>
             </div>

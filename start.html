@@ -64,9 +64,18 @@
     <div class="image-placeholder">
         <img src="img/K&L.png" alt="Bakery Image">
     </div>
-    <a href="index.html">
-        <button class="order-button">Place order now</button>
-    </a>
+
+    <div  id="button-in-product">
+        <a href="javascript:void(0);" class="order-button"  onclick="addToCart()"><i ></i> Place order now</a>
+    </div>
 </div>
 </body>
+<script>
+    function addToCart() {
+        // Optionally: Collect data and send it to the server
+
+        // Redirect to the endpage.html
+        window.location.href = '/index.html';
+    }
+</script>
 </html>
