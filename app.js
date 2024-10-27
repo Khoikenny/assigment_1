@@ -65,6 +65,7 @@ app.use('/routes', express.static(path.join(__dirname, '/routes')));
 
 
 // Serve HTML files
+app.get('/create-account.html', (req, res) => res.sendFile(path.join(__dirname, 'create-account.html')));
 app.get('/start.html', (req, res) => {
     const visitedPages = req.session.visitedPages || [];
 
