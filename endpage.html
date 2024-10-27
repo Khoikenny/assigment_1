@@ -93,8 +93,8 @@
     <img src="./img/logo.png" alt="Thank you image" class="img-fluid" style="max-width: 100%; height: auto; margin-top: 20px;">
 
     <!-- Back to Home Button -->
-    <div style="margin-top: 30px;">
-        <a href="index.html" class="btn btn-primary btn-lg">Back to Home</a>
+    <div class="add-to-cart" id="button-in-product">
+        <a href="javascript:void(0);" class="add-to-cart-btn" onclick="addToCart()"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
     </div>
 </div>
 
@@ -137,12 +137,26 @@
                         <li><a href="AboutUs.html">Contact Us</a></li>
                     </ul>
                 </div>
+                <div class="col-lg-3 col-md-6 footer-widget footer-table">
+                    <h3 class="widget-title footer-title">Visited Pages</h3>
+                    <ul>
+                        <!-- VISITED_PAGES -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
 </footer>
 <!-- /FOOTER -->
+<script>
+    function addToCart() {
+        // Optionally: Collect data and send it to the server
+
+        // Chuyển hướng đến trang endpage.html
+        window.location.href = '/index.html';
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
