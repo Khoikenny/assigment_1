@@ -7,8 +7,11 @@ const fs = require('fs');
 const session = require('express-session'); // Import express-session
 const querystring = require('querystring');
 const app = express();
+const cookieParser = require('cookie-parser');
 const port = 8080;
 
+
+// Define paths for uploads
 const uploadsDir = path.join(__dirname, 'uploads');
 const publicDir = path.join(__dirname, 'public', 'uploads');
 
@@ -74,17 +77,18 @@ app.use('/routes', express.static(path.join(__dirname, '/routes')));
 app.get('/start.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'start.html'));
 });
-app.post('/login', (req, res) => {
-    const { name, password } = req.body;
+// app.post('/login', (req, res) => {
+//     const { name, password } = req.body;
+//
+//     // Thay thế bằng cách xác thực thực sự (ví dụ: so sánh với CSDL)
+//     if (name && password) {
+//         req.session.user = { name }; // Lưu thông tin người dùng vào session
+//         res.redirect('/index.html'); // Chuyển hướng đến trang index
+//     } else {
+//         res.redirect('/start.html'); // Quay lại trang đăng nhập nếu không thành công
+//     }
+// });
 
-    // Thay thế bằng cách xác thực thực sự (ví dụ: so sánh với CSDL)
-    if (name && password) {
-        req.session.user = { name }; // Lưu thông tin người dùng vào session
-        res.redirect('/index.html'); // Chuyển hướng đến trang index
-    } else {
-        res.redirect('/start.html'); // Quay lại trang đăng nhập nếu không thành công
-    }
-});
 // app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/index.html',checkAuth, (req, res) => {
     const visitedPages = req.session.visitedPages || [];
@@ -331,7 +335,32 @@ app.post('/submit-feedback', [
     res.send('Feedback submitted successfully!');
 });
 
+// cookie (remember me)
+app.use(cookieParser());
+app.post('/login', (req, res) => {
+    const { name, password, rememberMe } = req.body;
+    console.log("anything")
+    console.log(req.body);
+    // Implement actual authentication logic here
+    if (name && password) {
+        req.session.user = { name, password }; // Store user info in session
+
+        // Set "remember me" cookie if checked
+        if (rememberMe) {
+            res.cookie('username', name, { maxAge: 60 * 24 * 60 * 60 * 1000 }); // 60 days
+            res.cookie('password', password, { maxAge: 60 * 24 * 60 * 60 * 1000 }); // 60 days
+        } else {
+            res.clearCookie('username'); // Clear the cookie if not checked
+        }
+
+        res.redirect('/index.html'); // Redirect to the main page
+    } else {
+        res.redirect('/start.html'); // Redirect back to login if failed
+    }
+});
 // Start the server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+
