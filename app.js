@@ -56,7 +56,13 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false } // Set to true if using HTTPS
 }));
-
+function checkAuth(req, res, next) {
+    if (req.session.user) {
+        next(); // Nếu người dùng đã đăng nhập, tiếp tục
+    } else {
+        res.redirect('/start.html'); // Chuyển hướng đến trang start nếu chưa đăng nhập
+    }
+}
 // Serve static files
 app.use('/css', express.static(__dirname + '/css/'));
 app.use('/img', express.static(__dirname + '/img'));
@@ -65,48 +71,22 @@ app.use('/routes', express.static(path.join(__dirname, '/routes')));
 
 
 // Serve HTML files
-app.get('/create-account.html', (req, res) => res.sendFile(path.join(__dirname, 'create-account.html')));
 app.get('/start.html', (req, res) => {
-    const visitedPages = req.session.visitedPages || [];
+    res.sendFile(path.join(__dirname, 'start.html'));
+});
+app.post('/login', (req, res) => {
+    const { name, password } = req.body;
 
-
-    // Read the index.html file and replace a placeholder with visited pages data
-    const now = new Date();
-    const activity = {
-        url: 'start.html', // Store the base URL
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString()
-    };
-
-    // Only log the visit if it is not already in the visited pages
-    // const exists = visitedPages.some(page => page.url === activity.url);
-    // if (!exists) {
-        visitedPages.push(activity);
-        req.session.visitedPages = visitedPages; // Update the session with the new visited pages
-        console.log('Visited Pages:', req.session.visitedPages);
-    // }
-    if (visitedPages.length >= 4) {
-        visitedPages.shift();
+    // Thay thế bằng cách xác thực thực sự (ví dụ: so sánh với CSDL)
+    if (name && password) {
+        req.session.user = { name }; // Lưu thông tin người dùng vào session
+        res.redirect('/index.html'); // Chuyển hướng đến trang index
+    } else {
+        res.redirect('/start.html'); // Quay lại trang đăng nhập nếu không thành công
     }
-
-    // Read the checkout.html file and replace a placeholder with visited pages data
-    fs.readFile(path.join(__dirname, 'start.html'), 'utf8', (err, data) => {
-        if (err) {
-            return res.status(500).send('Error reading file.');
-        }
-
-        // Convert visited pages to HTML
-        const visitedPagesHTML = visitedPages.map(page => `
-            <li>${page.url} - ${page.date} ${page.time}</li>
-        `).join('');
-
-        // Replace the placeholder in the new div for visited pages
-        const result = data.replace('<!-- VISITED_PAGES -->', visitedPagesHTML);
-        res.send(result);
-    });
 });
 // app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/index.html', (req, res) => {
+app.get('/index.html',checkAuth, (req, res) => {
     const visitedPages = req.session.visitedPages || [];
 
 
@@ -146,7 +126,7 @@ app.get('/index.html', (req, res) => {
     });
 });
 
-app.get('/checkout.html', (req, res) => {
+app.get('/checkout.html',checkAuth, (req, res) => {
     const visitedPages = req.session.visitedPages || [];
 
     // Log the current visit to checkout.html
@@ -188,7 +168,7 @@ app.get('/checkout.html', (req, res) => {
 
 
 // app.get('/endpage.html', (req, res) => res.sendFile(path.join(__dirname, 'endpage.html')));
-app.get('/endpage.html', (req, res) => {
+app.get('/endpage.html',checkAuth, (req, res) => {
     const visitedPages = req.session.visitedPages || [];
 
     // Read the endpage.html file and replace a placeholder with visited pages data
@@ -227,7 +207,7 @@ app.get('/endpage.html', (req, res) => {
     });
 });
 // app.get('/AboutUs.html', (req, res) => res.sendFile(path.join(__dirname, 'AboutUs.html')));
-app.get('/AboutUs.html', (req, res) => {
+app.get('/AboutUs.html',checkAuth, (req, res) => {
     const visitedPages = req.session.visitedPages || [];
     if (visitedPages.length >= 4) {
         visitedPages.shift();
@@ -252,7 +232,7 @@ app.get('/AboutUs.html', (req, res) => {
 
 
 // Serve product.html with embedded session data
-app.get('/product.html', (req, res) => {
+app.get('/product.html',checkAuth, (req, res) => {
     const productData = req.session.productData; // Lấy dữ liệu sản phẩm từ session
     if (productData) {
         res.sendFile(path.join(__dirname, 'product.html'));
@@ -262,7 +242,6 @@ app.get('/product.html', (req, res) => {
     }
 
 });
-
 
 // Handle form submission
 app.post('/checkout.html', upload.single('file'), [
@@ -356,126 +335,3 @@ app.post('/submit-feedback', [
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-// app.get('/checkout.html', (req, res) => res.sendFile(path.join(__dirname, 'checkout.html')));
-// app.get('/checkout.html', (req, res) => {
-//     const visitedPages = req.session.visitedPages || [];
-//
-//     // Read the checkout.html file and replace a placeholder with visited pages data
-//     fs.readFile(path.join(__dirname, 'checkout.html'), 'utf8', (err, data) => {
-//         if (err) {
-//             return res.status(500).send('Error reading file.');
-//         }
-//
-//         // Convert visited pages to HTML
-//         const visitedPagesHTML = visitedPages.map(page => `
-//             <li>${page.url} - ${page.date} ${page.time}</li>
-//         `).join('');
-//
-//         // Replace the placeholder in the new div for visited pages
-//         const result = data.replace('<!-- VISITED_PAGES -->', visitedPagesHTML);
-//         res.send(result);
-//     });
-// });
-// Serve checkout.html and log the visit activity
-
-//không có sự  dữ liệu từ index lên máy chủ có nghĩa là từ index nó đến một trang khác nhưng mà cái đó không phải từ server lên máy
-// app.use((req, res, next) => {
-//     // Initialize an array in the session to keep track of visited pages
-//     if (!req.session.visitedPages) {
-//         req.session.visitedPages = [];
-//     }
-//
-//     // Store the current page URL
-//     if (req.url !== '/favicon.ico') { // Ignore favicon requests
-//         req.session.visitedPages.push(req.url);
-//         console.log('Visited Pages:', req.session.visitedPages);
-//     }
-//
-//     next(); // Call the next middleware or route handler
-// });
-
-// app.use((req, res, next) => {
-//     // Khởi tạo một mảng trong session để theo dõi các trang đã truy cập
-//     if (!req.session.visitedPages) {
-//         req.session.visitedPages = [];
-//     }
-//
-//     // Lưu tất cả các trang đã truy cập
-//     if (req.url !== '/favicon.ico' && req.url.endsWith('.html')) {
-//         // Check if the page has already been visited
-//         const now = new Date();
-//         const activity = {
-//             url: req.url,
-//             date: now.toLocaleDateString(),
-//             time: now.toLocaleTimeString()
-//         };
-//
-//         // Kiểm tra nếu URL là product.html
-//         if (req.url.startsWith('/product.html')) {
-//             // Chỉ lưu '/product.html' mà không có tham số truy vấn
-//             const productActivity = {
-//                 url: '/product.html',
-//                 date: now.toLocaleDateString(),
-//                 time: now.toLocaleTimeString()
-//             };
-//
-//             // Kiểm tra sự tồn tại của sản phẩm để không thêm nhiều lần
-//             const exists = req.session.visitedPages.find(page => page.url === productActivity.url);
-//             if (!exists) {
-//                 req.session.visitedPages.push(productActivity);
-//             }
-//         } else {
-//             // Lưu tất cả các hoạt động khác
-//             req.session.visitedPages.push(activity);
-//         }
-//
-//         console.log('Visited Pages:', req.session.visitedPages);
-//     }
-//
-//     next(); // Gọi middleware hoặc route handler tiếp theo
-// });
-// app.use((req, res, next) => {
-//     // Initialize an array in the session to track visited pages
-//     if (!req.session.visitedPages) {
-//         req.session.visitedPages = [];
-//     }
-//
-//     // Log the current date and time
-//     const now = new Date();
-//     let pageUrl = req.url;
-//     if (pageUrl.startsWith('/checkout.html')) {
-//         pageUrl = '/checkout.html'; // Store only the base URL
-//     }
-//     const activity = {
-//         url: req.url.startsWith('/') ? req.url.slice(1) : req.url,
-//         date: now.toLocaleDateString(),
-//         time: now.toLocaleTimeString()
-//     };
-//
-//     // Ignore favicon requests and only track HTML pages
-//     // if (req.url !== '/favicon.ico' && req.url.endsWith('.html')) {
-//     //     // Check if the page has already been visited
-//     //     const exists = req.session.visitedPages.find(page => page.url === activity.url);
-//     //     if (!exists) {
-//     //         req.session.visitedPages.push(activity);
-//     //         // Trim to the last 4 pages
-//     //         if (req.session.visitedPages.length > 4) {
-//     //             req.session.visitedPages = req.session.visitedPages.slice(-4);
-//     //         }
-//     //     }
-//     if (req.url !== '/favicon.ico' && req.url.endsWith('.html')) {
-//         const exists = req.session.visitedPages.some(page => page.url === activity.url);
-//         if (!exists) {
-//             req.session.visitedPages.push(activity);
-//             // Keep only the latest four entries visible in the HTML display
-//             if (req.session.visitedPages.length > 4) {
-//                 req.session.visitedPages = req.session.visitedPages.slice(-4);
-//             }
-//         }
-//
-//         console.log('Visited Pages:', req.session.visitedPages);
-//     }
-//
-//
-//     next(); // Call the next middleware or route handler
-// });
