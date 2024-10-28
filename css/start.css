@@ -61,22 +61,33 @@ h1 {
     color: #6A4819;
 }
 
+/* Center the entire login form */
 .login-form {
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
 
-    max-width: 400px; /* Giới hạn chiều rộng bằng với .image-placeholder */
-    margin: 0 auto; /* Căn giữa khung login-form */
-    text-align: left; /* Căn trái cho các phần tử bên trong */
+/* Center the checkbox and label */
+.login-form .form-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
 }
 
 .login-form input[type="text"],
 .login-form input[type="password"] {
-    width: 100%;
-    max-width: 400px;
+    width: 350px; /* Set a fixed width to make the input boxes longer */
     padding: 10px;
-    margin: 10px 0;
+    margin: 10px auto; /* Center the input boxes */
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 18px;
+    box-sizing: border-box; /* Ensures padding doesn’t increase element width */
 }
 
 .create-account {
@@ -118,4 +129,35 @@ h1 {
     #order-button:hover {
         background-color: #00fff1;
     }
+}
+.login-form button[type="submit"] {
+    background-color: #6A4819;
+    color: #f4f0e8;
+    font-family: 'Gaegu', cursive;
+    font-size: 20px;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%; /* Full width button */
+    margin-top: 10px;
+}
+
+.login-form button[type="submit"]:hover {
+    background-color: #00fff1;
+}
+
+/* Style for the 'Remember Me' checkbox and label */
+.login-form .form-check label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #6A4819;
+    cursor: pointer;
+}
+
+.login-form .form-check input[type="checkbox"] {
+    margin-right: 5px; /* Space between checkbox and label */
+    transform: scale(1.2); /* Scale up the checkbox */
+    cursor: pointer;
 }
